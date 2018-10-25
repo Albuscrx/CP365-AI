@@ -63,7 +63,7 @@ class AdalineGD(object):
             prediction = self.net_input(X)
             self.cost_.append(np.sum(np.square(prediction-y)))
             delta = -(np.asmatrix(prediction-y))*with_bias
-            delta = self.eta * delta
+            delta = 2.0 * self.eta * delta
             self.w_ += np.squeeze(np.asarray(delta))
         return self
 
