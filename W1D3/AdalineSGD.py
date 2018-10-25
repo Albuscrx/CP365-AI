@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 Implement the Adaline algorithm with stochastic gradient descent
+Assignment: Albus & Han
 """
 
 # ## Implementing an adaptive linear neuron in Python

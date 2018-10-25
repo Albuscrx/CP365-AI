@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 Implement the Adaline algorithm with gradient descent
+Assignment: Albus & Han
 """
 
 # ## Implementing an adaptive linear neuron in Python
@@ -62,8 +63,8 @@ class AdalineGD(object):
         for _ in range(self.n_iter):
             prediction = self.net_input(X)
             self.cost_.append(np.sum(np.square(prediction-y)))
-            delta = -(np.asmatrix(prediction-y))*with_bias
-            delta = 2.0 * self.eta * delta
+            delta = -2.0 * (np.asmatrix(prediction-y))*with_bias
+            delta = self.eta * delta
             self.w_ += np.squeeze(np.asarray(delta))
         return self
 
