@@ -12,6 +12,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.colors import ListedColormap
 
+
 class AdalineGD(object):
     """ADAptive LInear NEuron classifier.
 
@@ -34,6 +35,7 @@ class AdalineGD(object):
       Sum-of-squares cost function value in each epoch.
 
     """
+
     def __init__(self, eta=0.01, n_iter=50, random_state=1):
         self.eta = eta
         self.n_iter = n_iter
@@ -57,21 +59,21 @@ class AdalineGD(object):
         self : object
 
         """
-        self.w_ = np.random.RandomState(self.random_state).uniform(-1, 1, X.shape[1]+1)
+        self.w_ = np.random.RandomState(self.random_state).uniform(-1, 1, X.shape[1] + 1)
 
         with_bias = np.hstack((np.ones((X.shape[0], 1)), X))
         for _ in range(self.n_iter):
             prediction = self.net_input(X)
-            self.cost_.append(np.sum(np.square(prediction-y)))
-            delta = -2.0 * (np.asmatrix(prediction-y))*with_bias
+            delta = -2.0 * (np.asmatrix(prediction - y)) * with_bias
             delta = self.eta * delta
+            self.cost_.append(np.sum(np.square(np.dot(np.asarray(with_bias), self.w_) - y)))
             self.w_ += np.squeeze(np.asarray(delta))
         return self
 
     def net_input(self, X):
         """Calculate net input"""
         with_bias = np.hstack((np.ones((X.shape[0], 1)), X))
-        return np.asmatrix(self.w_)*with_bias.T
+        return np.asmatrix(self.w_) * with_bias.T
 
     def activation(self, X):
         """Compute linear activation"""
@@ -80,7 +82,7 @@ class AdalineGD(object):
     def predict(self, X):
         """Return class label after unit step"""
         return np.sign(self.net_input(X))
-        
+
     def plot_decision_regions(self, X, y, resolution=0.02):
 
         # setup marker generator and color map
@@ -101,12 +103,12 @@ class AdalineGD(object):
 
         # plot class samples
         for idx, cl in enumerate(np.unique(y)):
-            plt.scatter(x=X[y == cl, 0], 
+            plt.scatter(x=X[y == cl, 0],
                         y=X[y == cl, 1],
-                        alpha=0.8, 
+                        alpha=0.8,
                         c=colors[idx],
-                        marker=markers[idx], 
-                        label=cl, 
+                        marker=markers[idx],
+                        label=cl,
                         edgecolor='black')
 
         plt.xlabel('sepal length [cm]')
@@ -114,24 +116,25 @@ class AdalineGD(object):
         plt.legend(loc='upper left')
         plt.show()
 
+
 def main():
     df = pd.read_csv('https://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data', header=None)
     df.tail()
     X = df.iloc[0:150, [0, 2]].values
 
-    y = [1]*50 + [-1]*100
+    y = [1] * 50 + [-1] * 100
     ada1 = AdalineGD(eta=0.0001, n_iter=100, random_state=1)
     ada1.fit(X, y)
     plt.title('Adaline - Setosa classifier')
     ada1.plot_decision_regions(X, y)
 
-    y = [-1]*50 + [1]*50 + [-1]*50
+    y = [-1] * 50 + [1] * 50 + [-1] * 50
     ada2 = AdalineGD(eta=0.0001, n_iter=100, random_state=1)
     ada2.fit(X, y)
     plt.title('Adaline - Versicolour classifier')
     ada2.plot_decision_regions(X, y)
 
-    y = [-1]*100 + [1]*50
+    y = [-1] * 100 + [1] * 50
     ada3 = AdalineGD(eta=0.0001, n_iter=100, random_state=1)
     ada3.fit(X, y)
     plt.title('Adaline - Virginica classifier')
@@ -153,6 +156,7 @@ def main():
     ax[1].set_title('Adaline - Learning rate 0.0001')
 
     plt.show()
+
 
 if __name__ == '__main__':
     main()
