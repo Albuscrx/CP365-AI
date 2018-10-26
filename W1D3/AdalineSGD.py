@@ -65,7 +65,7 @@ class AdalineSGD(object):
                 data = np.asmatrix(X[i,:])
                 label = y[i]
                 with_bias = np.hstack((np.ones((1, 1)), data))
-                cur_cost += np.square(self.net_input(data))
+                cur_cost += np.square(self.net_input(data) - label)
                 delta = -2*(self.net_input(data) - label)*with_bias
                 delta = self.eta * delta
                 self.w_ += np.squeeze(np.asarray(delta))
@@ -99,7 +99,6 @@ def main():
     fig, ax = plt.subplots(nrows=1, ncols=2, figsize=(10, 4))
 
     ada1 = AdalineSGD(n_iter=10, eta=0.01).fit(X, y)
-    print(ada1.cost_)
     ax[0].plot(range(1, len(ada1.cost_) + 1), np.log10(ada1.cost_), marker='o')
     ax[0].set_xlabel('Epochs')
     ax[0].set_ylabel('log(Sum-squared-error)')
