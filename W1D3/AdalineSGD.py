@@ -69,8 +69,8 @@ class AdalineSGD(object):
                 with_bias = np.hstack((np.ones((1, 1)), data))
                 delta = -2 * (self.net_input(data) - label) * with_bias
                 delta = self.eta * delta
-                self.w_ += np.squeeze(np.asarray(delta))
                 cur_cost = np.square(np.dot(np.asarray(with_bias), self.w_) - y[i])
+                self.w_ += np.squeeze(np.asarray(delta))
             self.cost_.append(cur_cost)
         return self
 
