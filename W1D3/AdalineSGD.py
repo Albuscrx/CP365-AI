@@ -12,6 +12,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.colors import ListedColormap
 
+
 class AdalineSGD(object):
     """ADAptive LInear NEuron classifier.
 
@@ -34,6 +35,7 @@ class AdalineSGD(object):
       Sum-of-squares cost function value in each epoch.
 
     """
+
     def __init__(self, eta=0.0001, n_iter=50, random_state=1):
         self.eta = eta
         self.n_iter = n_iter
@@ -57,26 +59,25 @@ class AdalineSGD(object):
         self : object
 
         """
-        self.w_ = np.random.RandomState(self.random_state).uniform(-1, 1, X.shape[1]+1)
+        self.w_ = np.random.RandomState(self.random_state).uniform(-1, 1, X.shape[1] + 1)
 
         for _ in range(self.n_iter):
             cur_cost = 0.0
             for i in range(X.shape[0]):
-                data = np.asmatrix(X[i,:])
+                data = np.asmatrix(X[i, :])
                 label = y[i]
                 with_bias = np.hstack((np.ones((1, 1)), data))
-                cur_cost += np.square(self.net_input(data))
-                delta = -2*(self.net_input(data) - label)*with_bias
+                delta = -2 * (self.net_input(data) - label) * with_bias
                 delta = self.eta * delta
                 self.w_ += np.squeeze(np.asarray(delta))
-
-            self.cost_.append(cur_cost[0, 0])
+                cur_cost = np.square(np.dot(np.asarray(with_bias), self.w_) - y[i])
+            self.cost_.append(cur_cost)
         return self
 
     def net_input(self, X):
         """Calculate net input"""
         with_bias = np.hstack((np.ones((X.shape[0], 1)), X))
-        return np.asmatrix(self.w_)*with_bias.T
+        return np.asmatrix(self.w_) * with_bias.T
 
     def activation(self, X):
         """Compute linear activation"""
@@ -85,15 +86,14 @@ class AdalineSGD(object):
     def predict(self, X):
         """Return class label after unit step"""
         return np.sign(self.net_input(X))
-        
+
 
 def main():
-
     df = pd.read_csv('https://archive.ics.uci.edu/ml/'
-            'machine-learning-databases/iris/iris.data', header=None)
+                     'machine-learning-databases/iris/iris.data', header=None)
     df.tail()
     X = df.iloc[0:150, [0, 2]].values
-    y = [1]*50 + [-1]*100
+    y = [1] * 50 + [-1] * 100
 
     # Learning rate
     fig, ax = plt.subplots(nrows=1, ncols=2, figsize=(10, 4))
